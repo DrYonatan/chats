@@ -1,3 +1,9 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "parser": "@typescript-eslint/parser",
+
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "no-unused-vars": "off",  // Disable the default no-unused-vars rule
+    "@typescript-eslint/no-unused-vars": "off"  // Disable the TypeScript-specific unused-vars rule
+  }
 }
