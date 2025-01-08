@@ -9,7 +9,7 @@ export const getUsers = async (): Promise<void> => {
   }
 };
 
-export const getUserbyId = async () => {
-  const user = await fetchUserById("user1");
+export const getUserbyId = async (id: string) => {
+  const user = await fetchUserById(id);
   return user;
 };

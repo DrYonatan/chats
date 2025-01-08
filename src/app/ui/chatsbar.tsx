@@ -1,18 +1,24 @@
 import { Suspense } from "react";
 import ChatsList from "./chats-list";
 import ChatsLoading from "./chats-loading";
-import AddIcon from "@mui/icons-material/Add";
+import AddChatButton from "./add-chat-button";
 
 export default function ChatsBar() {
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    <div className="flex flex-col h-screen px-3 md:px-2">
       <aside
         id="sidebar-multi-level-sidebar"
-        className="z-40 w-60 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="z-40 w-60  transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+        <div className="px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <span
               style={{
                 fontSize: "30px",
@@ -23,9 +29,7 @@ export default function ChatsBar() {
             >
               Chats
             </span>
-            <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold border-b-4 border-blue-700 hover:border-blue-500 rounded h-10 w-10">
-              <AddIcon />
-            </button>
+            <AddChatButton />
           </div>
 
           <Suspense fallback={<ChatsLoading />}>

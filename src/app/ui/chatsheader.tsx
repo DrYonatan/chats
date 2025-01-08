@@ -13,7 +13,7 @@ export default function ChatsHeader() {
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <img
           style={{ height: "60px" }}
-          src="https://cdn6.aptoide.com/imgs/1/2/2/1221bc0bdd2354b42b293317ff2adbcf_icon.png"
+          src="https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png"
         ></img>
         <span
           className="dark:text-white"

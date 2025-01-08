@@ -1,14 +1,15 @@
 import { Chat } from "./chat";
 import { Message } from "./message";
+import { User } from "./user";
 
 export class DM implements Chat {
   id: string;
   messages: Message[];
-  participantsIds: string[];
+  participants?: User[];
 
-  constructor(id: string, participantsIds: string[], messages: Message[]) {
+  constructor(id: string, participants: User[], messages: Message[]) {
     this.id = id;
     this.messages = messages;
-    this.participantsIds = participantsIds;
+    this.participants = participants;
   }
 }

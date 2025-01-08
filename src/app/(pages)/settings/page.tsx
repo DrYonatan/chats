@@ -6,7 +6,7 @@ export default function Page() {
 
   return (
     <div>
-     <span>Settings Page</span>
+      <span>Settings Page</span>
     </div>
   );
 }

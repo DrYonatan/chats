@@ -22,10 +22,11 @@ export default function SideBar() {
   }, []);
 
   return (
-    <div className="flex h-full flex-col px-3 md:px-2">
+    <div className="flex flex-col px-3 md:px-2">
       <aside
+        style={{flexGrow: 1}}
         id="separator-sidebar"
-        className="z-50 w-15 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="z-50 w-15 transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
         <div
