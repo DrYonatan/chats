@@ -24,31 +24,16 @@ export default function SideBar() {
   return (
     <div className="flex flex-col px-3 md:px-2">
       <aside
-        style={{flexGrow: 1}}
         id="separator-sidebar"
-        className="z-50 w-15 transition-transform -translate-x-full sm:translate-x-0"
+        className="z-50 w-15 transition-transform -translate-x-full sm:translate-x-0 grow"
         aria-label="Sidebar"
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-          className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-900"
-        >
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-900 flex flex-col justify-between">
           <div>
             <SideBarLinks />
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
+          <div className="flex flex-col items-center gap-[10px]">
             <button onClick={() => darkModeHandler()}>
               {
                 dark && (
@@ -64,7 +49,7 @@ export default function SideBar() {
             </button>
 
             <img
-              style={{ width: "40px" }}
+              className="w-[40px]"
               src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png"
             ></img>
           </div>

@@ -1,8 +1,6 @@
-"use client";
-
 export default function TextFieldComponent() {
   return (
-    <div style={{ flexGrow: "1" }}>
+    <div className="flex grow">
       <input
         type="text"
         id="default-input"

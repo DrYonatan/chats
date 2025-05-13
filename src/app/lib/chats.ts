@@ -4,7 +4,7 @@ import { DM } from "../types/dm";
 import { GroupChat } from "../types/group-chat";
 import { Message } from "../types/message";
 import { User } from "../types/user";
-import { database, onValue, ref, set } from "./firebase/firebase";
+import { database, get, onValue, ref, set } from "./firebase/firebase";
 
 export const fetchChats = async (): Promise<Chat[]> => {
   try {
@@ -41,6 +41,25 @@ export const fetchChats = async (): Promise<Chat[]> => {
   } catch (error) {
     return [];
   }
+};
+
+export const fetchChatById = async (
+  chatId: string
+): Promise<Chat | null | undefined> => {
+  try {
+    const chatRef = ref(database, `chats/${chatId}`);
+    const snapshot = await get(chatRef);
+
+    if (!snapshot.exists()) {
+      return null;
+    }
+
+    let res;
+    const data = snapshot.val();
+    res = parseChat(data);
+
+    return res;
+  } catch (error) {}
 };
 
 export const saveChat = async (
@@ -83,45 +102,48 @@ async function parseChats(
     picture: any;
   }[]
 ): Promise<Chat[]> {
-  return Promise.all(
-    chatsDTO.map(async (chat) => {
-      let res: Chat;
+  return Promise.all(chatsDTO.map(async (chat) => parseChat(chat)));
+}
 
-      // Group Chat type
-      const participants = await Promise.all(
-        chat.participantsIds.map(async (id: string) => await getUserbyId(id))
-      );
+async function parseChat(chatDTO: {
+  id: string;
+  messages: any;
+  participantsIds: any;
+  type: any;
+  groupName: any;
+  picture: any;
+}) {
+  let res: Chat;
 
-      const messages = await Promise.all(
-        chat.messages.map(async (message: any) => {
-          const sender = await getUserbyId(message.senderId);
-          return {
-            id: message.id,
-            sendTime: message.sendTime,
-            text: message.text,
-            sender: sender,
-          };
-        })
-      );
+  // Group Chat type
+  const participants = await Promise.all(
+    chatDTO.participantsIds.map(async (id: string) => await getUserbyId(id))
+  );
 
-      // Slice participants if necessary (e.g., remove the first participant)
-      const groupParticipants = participants; // You can change the logic here if needed
-
-      if (chat.type === "DM") {
-        // Direct Message (DM) chat type
-        res = new DM(chat.id, groupParticipants, messages);
-      } else {
-        res = new GroupChat(
-          chat.id,
-          chat.groupName,
-          chat.picture,
-          messages,
-          groupParticipants
-        );
-      }
-      console.log(res.participants);
-
-      return res;
+  const messages = await Promise.all(
+    chatDTO.messages.map(async (message: any) => {
+      const sender = await getUserbyId(message.senderId);
+      return {
+        id: message.id,
+        sendTime: message.sendTime,
+        text: message.text,
+        sender: sender,
+      };
     })
   );
+
+  if (chatDTO.type === "DM") {
+    // Direct Message (DM) chat type
+    res = new DM(chatDTO.id, participants, messages);
+  } else {
+    res = new GroupChat(
+      chatDTO.id,
+      chatDTO.groupName,
+      chatDTO.picture,
+      messages,
+      participants
+    );
+  }
+
+  return res;
 }

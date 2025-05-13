@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -9,7 +8,7 @@ import ContactsIcon from "@mui/icons-material/Contacts";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: "Home", href: "/", icon: ChatIcon },
+  { name: "Chats", href: "/chats", icon: ChatIcon },
   {
     name: "Contacts",
     icon: ContactsIcon,
@@ -32,7 +31,8 @@ export default function SideBarLinks() {
             className={clsx(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 dark:bg-slate-900 dark:text-white p-3 font-medium hover:bg-sky-100 hover:text-blue-600 dark:hover:bg-sky-950 md:flex-none md:justify-start md:p-2 md:px-3",
               {
-                "bg-sky-100 dark:bg-sky-900 text-blue-600 dark:text-blue-500": pathname === link.href,
+                "bg-sky-100 dark:bg-sky-900 text-blue-600 dark:text-blue-500":
+                  pathname.includes(link.href),
               }
             )}
           >

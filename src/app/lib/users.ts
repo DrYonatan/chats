@@ -35,7 +35,6 @@ export const fetchUserById = async (userId: string) => {
     
     if (snapshot.exists()) {
       const userData = snapshot.val(); // Get the data from the snapshot
-      console.log("User Data:", userData); // Log the data for the specific user
       return userData;
     } else {
       console.log("No data available for this user.");

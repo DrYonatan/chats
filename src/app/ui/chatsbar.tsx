@@ -2,8 +2,13 @@ import { Suspense } from "react";
 import ChatsList from "./chats-list";
 import ChatsLoading from "./chats-loading";
 import AddChatButton from "./add-chat-button";
+import { Chat } from "../types/chat";
 
-export default function ChatsBar() {
+type Props = {
+  chats: Chat[] | undefined;
+};
+
+export default function ChatsBar({ chats }: Props) {
   return (
     <div className="flex flex-col h-screen px-3 md:px-2">
       <aside
@@ -12,28 +17,15 @@ export default function ChatsBar() {
         aria-label="Sidebar"
       >
         <div className="px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "30px",
-                fontFamily: "initial",
-                fontWeight: "bolder",
-              }}
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group ms-3"
-            >
+          <div className="flex items-center justify-between">
+            <span className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group ms-3 text-[30px] font-[initial] font-bold">
               Chats
             </span>
             <AddChatButton />
           </div>
 
           <Suspense fallback={<ChatsLoading />}>
-            <ChatsList />
+            <ChatsList chats={chats} />
           </Suspense>
         </div>
       </aside>
