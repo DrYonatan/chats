@@ -3,7 +3,6 @@ import { Chat } from "../types/chat";
 import { DM } from "../types/dm";
 import { GroupChat } from "../types/group-chat";
 import { Message } from "../types/message";
-import { User } from "../types/user";
 import { database, get, onValue, ref, set } from "./firebase/firebase";
 
 export const fetchChats = async (): Promise<Chat[]> => {
@@ -56,7 +55,7 @@ export const fetchChatById = async (
 
     let res;
     const data = snapshot.val();
-    res = parseChat(data);
+    res = parseChat(chatId, data);
 
     return res;
   } catch (error) {}
@@ -71,7 +70,7 @@ export const saveChat = async (
   picture: string
 ): Promise<void> => {
   try {
-    const chatRef = ref(database, `chats/${chatId}`);
+    const chatRef = ref(database, `chats/${chatId}/messages`);
     if (type === "DM") {
       set(chatRef, {
         messages: messages,
@@ -92,6 +91,24 @@ export const saveChat = async (
   }
 };
 
+export const addMessage = async (
+  chatId: string,
+  message: Message
+): Promise<void> => {
+  try {
+    const messageId = createRandomString(5);
+    console.log(chatId);
+    const messagesRef = ref(database, `chats/${chatId}/messages/${messageId}`);
+    set(messagesRef, {
+      text: message.text,
+      sendTime: message.sendTime.toString(),
+      senderId: message.sender.id
+    });
+  } catch (error) {
+    console.error("An Error has occured " + error);
+  }
+};
+
 async function parseChats(
   chatsDTO: {
     id: string;
@@ -102,29 +119,33 @@ async function parseChats(
     picture: any;
   }[]
 ): Promise<Chat[]> {
-  return Promise.all(chatsDTO.map(async (chat) => parseChat(chat)));
+  return Promise.all(chatsDTO.map(async (chat) => parseChat(chat.id, chat)));
 }
 
-async function parseChat(chatDTO: {
-  id: string;
-  messages: any;
-  participantsIds: any;
-  type: any;
-  groupName: any;
-  picture: any;
-}) {
+async function parseChat(
+  id: string,
+  chatDTO: {
+    messages: any;
+    participantsIds: any;
+    type: any;
+    groupName: any;
+    picture: any;
+  }
+) {
   let res: Chat;
 
   // Group Chat type
   const participants = await Promise.all(
-    chatDTO.participantsIds.map(async (id: string) => await getUserbyId(id))
+    chatDTO.participantsIds?.map(async (id: string) => await getUserbyId(id))
   );
 
+  const messageEntries = Object.entries(chatDTO.messages || []);
+
   const messages = await Promise.all(
-    chatDTO.messages.map(async (message: any) => {
+    messageEntries.map(async ([id, message]: [string, any]) => {
       const sender = await getUserbyId(message.senderId);
       return {
-        id: message.id,
+        id: id,
         sendTime: message.sendTime,
         text: message.text,
         sender: sender,
@@ -134,10 +155,10 @@ async function parseChat(chatDTO: {
 
   if (chatDTO.type === "DM") {
     // Direct Message (DM) chat type
-    res = new DM(chatDTO.id, participants, messages);
+    res = new DM(id, participants, messages);
   } else {
     res = new GroupChat(
-      chatDTO.id,
+      id,
       chatDTO.groupName,
       chatDTO.picture,
       messages,
@@ -146,4 +167,14 @@ async function parseChat(chatDTO: {
   }
 
   return res;
+}
+
+function createRandomString(length: number) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 }
