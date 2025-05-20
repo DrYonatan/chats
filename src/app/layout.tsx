@@ -25,11 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
-        <div className="dark:bg-gray-800" style={{ display: "flex" }}>
+        <div className="dark:bg-gray-800 flex h-full">
           <SideBar />
           {children}
         </div>

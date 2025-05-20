@@ -1,4 +1,5 @@
-import { fetchUserById, fetchUsers } from "../lib/users";
+import { fetchUserById, fetchUserByEmail, fetchUsers } from "../lib/users";
+import { User } from "../types/user";
 
 export const getUsers = async (): Promise<void> => {
   try {
@@ -13,3 +14,8 @@ export const getUserbyId = async (id: string) => {
   const user = await fetchUserById(id);
   return user;
 };
+
+export const getUserByUsernameAndPassword = async (email: string): Promise<User | null> => {
+  const user: User | null = await fetchUserByEmail(email);
+  return user;
+}

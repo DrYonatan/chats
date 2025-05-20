@@ -22,13 +22,13 @@ export default function SideBar() {
   }, []);
 
   return (
-    <div className="flex flex-col px-3 md:px-2">
+    <div className="flex flex-col px-3 md:px-2 h-full">
       <aside
         id="separator-sidebar"
-        className="z-50 w-15 transition-transform -translate-x-full sm:translate-x-0 grow"
+        className="z-50 w-15 transition-transform -translate-x-full sm:translate-x-0 grow h-full"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-900 flex flex-col justify-between">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-900 flex flex-col justify-between h-full">
           <div>
             <SideBarLinks />
           </div>
