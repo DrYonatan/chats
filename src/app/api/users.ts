@@ -1,4 +1,5 @@
-import { fetchUserById, fetchUserByEmail, fetchUsers } from "../lib/users";
+import { getAuth } from "firebase/auth";
+import { fetchUserById, fetchUsers } from "../lib/users";
 import { User } from "../types/user";
 
 export const getUsers = async (): Promise<void> => {
@@ -10,12 +11,11 @@ export const getUsers = async (): Promise<void> => {
   }
 };
 
-export const getUserbyId = async (id: string) => {
-  const user = await fetchUserById(id);
+export const getCurrentUser = async (): Promise<User> => {
+  const auth = getAuth();
+  console.log(auth.currentUser)
+  const user: User = await fetchUserById(
+    auth.currentUser ? auth.currentUser.uid : ""
+  );
   return user;
 };
-
-export const getUserByUsernameAndPassword = async (email: string): Promise<User | null> => {
-  const user: User | null = await fetchUserByEmail(email);
-  return user;
-}

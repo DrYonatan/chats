@@ -14,7 +14,7 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       await signUp(username, email, password);
-      router.push("/chats");
+      router.push("/login");
     } catch (error: any) {
       alert(error.message);
     }

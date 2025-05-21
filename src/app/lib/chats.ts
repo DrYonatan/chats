@@ -1,9 +1,10 @@
-import { getUserbyId } from "../api/users";
+import { getCurrentUser } from "../api/users";
 import { Chat } from "../types/chat";
 import { DM } from "../types/dm";
 import { GroupChat } from "../types/group-chat";
 import { Message } from "../types/message";
 import { database, get, onValue, ref, set } from "./firebase/firebase";
+import { fetchUserById } from "./users";
 
 export const fetchChats = async (): Promise<Chat[]> => {
   try {
@@ -102,7 +103,7 @@ export const addMessage = async (
     set(messagesRef, {
       text: message.text,
       sendTime: message.sendTime.toString(),
-      senderId: message.sender.id
+      senderId: message.sender.id,
     });
   } catch (error) {
     console.error("An Error has occured " + error);
@@ -136,14 +137,14 @@ async function parseChat(
 
   // Group Chat type
   const participants = await Promise.all(
-    chatDTO.participantsIds?.map(async (id: string) => await getUserbyId(id))
+    chatDTO.participantsIds?.map(async (id: string) => await fetchUserById(id))
   );
 
   const messageEntries = Object.entries(chatDTO.messages || []);
 
   const messages = await Promise.all(
     messageEntries.map(async ([id, message]: [string, any]) => {
-      const sender = await getUserbyId(message.senderId);
+      const sender = await fetchUserById(message.senderId);
       return {
         id: id,
         sendTime: message.sendTime,

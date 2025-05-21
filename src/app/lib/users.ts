@@ -49,10 +49,6 @@ export const fetchUserById = async (userId: string) => {
   }
 };
 
-export const fetchUserByEmail = async (email: string): Promise<User | null> => {
-  return null;
-};
-
 export const createUser = async (
   id: string,
   email: string,

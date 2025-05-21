@@ -14,7 +14,7 @@ export const signUp = async (
   createUserWithEmailAndPassword(auth, email, password).then(
     (userCredential) => {
       const user = userCredential.user;
-      return createUser(user.uid, username, email);
+      return createUser(user.uid, email, username);
     }
   );
 };

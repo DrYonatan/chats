@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 
 export default function ChatBox() {
   const params = useParams();
+
   const [chat, setChat] = useState<Chat>();
 
   const [messageText, setMessageText] = useState<string>();
