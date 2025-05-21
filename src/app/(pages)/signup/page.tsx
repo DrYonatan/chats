@@ -29,7 +29,6 @@ export default function SignUpPage() {
         <h1 className="text-xl font-bold mb-4 dark:text-white">Sign Up</h1>
         <input
           className="border p-2 w-full mb-2 bg-white dark:bg-slate-900 text-black dark:text-white"
-          type="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
