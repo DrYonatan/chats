@@ -1,14 +1,14 @@
+"use client";
+
 import { Suspense } from "react";
 import ChatsList from "./chats-list";
 import ChatsLoading from "./chats-loading";
 import AddChatButton from "./add-chat-button";
-import { Chat } from "../types/chat";
+import { useCurrentUser } from "../contexts/UserContext";
 
-type Props = {
-  chats: Chat[] | undefined;
-};
+export default function ChatsBar() {
+  const user = useCurrentUser();
 
-export default function ChatsBar({ chats }: Props) {
   return (
     <div className="flex flex-col h-screen px-3 md:px-2">
       <aside
@@ -25,7 +25,7 @@ export default function ChatsBar({ chats }: Props) {
           </div>
 
           <Suspense fallback={<ChatsLoading />}>
-            <ChatsList chats={chats} />
+            <ChatsList chats={user?.chats} />
           </Suspense>
         </div>
       </aside>

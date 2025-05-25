@@ -1,4 +1,3 @@
-import { getCurrentUser } from "../api/users";
 import { Chat } from "../types/chat";
 import { DM } from "../types/dm";
 import { GroupChat } from "../types/group-chat";
@@ -98,7 +97,6 @@ export const addMessage = async (
 ): Promise<void> => {
   try {
     const messageId = createRandomString(5);
-    console.log(chatId);
     const messagesRef = ref(database, `chats/${chatId}/messages/${messageId}`);
     set(messagesRef, {
       text: message.text,

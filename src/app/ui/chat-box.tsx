@@ -7,7 +7,7 @@ type Props = {
 
 export default function ChatBox({ chat }: Props) {
   return (
-    <div className="bg-blue-100 dark:bg-gray-900 flex grow flex-col-reverse justify-start h-full">
+    <div className="bg-blue-100 dark:bg-gray-900 flex grow flex-col-reverse justify-start h-full overflow-hidden">
       {chat?.messages.map((message) => {
         return (
           <MessageComponent

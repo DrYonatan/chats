@@ -3,13 +3,18 @@
 import { Dispatch, SetStateAction } from "react";
 
 type props = {
+  messageText: string | undefined;
   setMessageText: Dispatch<SetStateAction<string | undefined>>;
 };
 
-export default function TextFieldComponent({ setMessageText }: props) {
+export default function TextFieldComponent({
+  messageText,
+  setMessageText,
+}: props) {
   return (
     <div className="flex grow">
       <input
+        value={messageText}
         onChange={(e) => setMessageText(e.target.value)}
         type="text"
         id="default-input"

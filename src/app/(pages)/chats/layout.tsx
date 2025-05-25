@@ -11,10 +11,10 @@ export default async function RootLayout({
 
   return (
     <div className="flex w-full">
-      <ChatsBar chats={chats} />
+      <ChatsBar />
       <div className="flex flex-col w-full">
         <ChatsHeader />
-        <main className="w-full h-full bg-blue-100 dark:bg-gray-900">
+        <main className="w-full h-full bg-blue-100 dark:bg-gray-900 overflow-hidden">
           {children}
         </main>
       </div>
