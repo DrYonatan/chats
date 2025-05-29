@@ -60,7 +60,7 @@ export const createUser = async (
     set(userRef, {
       username: username,
       email: email,
-      profilepic: "",
+      profilepic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQJxKGGpPc9-5g25KWwnsCCy9O_dlS4HWo5A&s",
     });
   } catch (error) {
     console.error("An error has occured" + error);

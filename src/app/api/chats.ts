@@ -13,6 +13,7 @@ export const getChatById = async (
   chatId: string
 ): Promise<Chat | null | undefined> => {
   const response = await fetchChatById(chatId);
+
   return response;
 };
 

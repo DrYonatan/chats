@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import SideBarLinks from "./sidebar-links";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import Link from "next/link";
 
 export default function SideBar() {
   const [dark, setDark] = useState(false);
@@ -48,10 +49,12 @@ export default function SideBar() {
               }
             </button>
 
-            <img
-              className="w-[40px]"
-              src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png"
-            ></img>
+            <Link href={"/profile"}>
+              <img
+                className="w-[40px]"
+                src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png"
+              />
+            </Link>
           </div>
         </div>
       </aside>
