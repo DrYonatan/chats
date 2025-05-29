@@ -8,7 +8,6 @@ import {
   ReactNode,
 } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { fetchUserById } from "@/app/lib/users";
 import { User } from "@/app/types/user"; // adjust this import to where your User type is
 import { getUserById } from "../api/users";
 

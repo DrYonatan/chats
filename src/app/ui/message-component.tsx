@@ -1,9 +1,19 @@
+"use client";
+
 import { useCurrentUser } from "../contexts/UserContext";
 import { Message } from "../types/message";
 
 export default function MessageComponent({ text, sender, sendTime }: Message) {
   const time = new Date(sendTime);
-  return sender.id != useCurrentUser()?.id ? (
+  const currentUser = useCurrentUser();
+
+  if (!currentUser) {
+    return null; // or a loading spinner
+  }
+
+  const isSender = currentUser.username == sender.username;
+
+  return !isSender ? (
     <div className="bg-gray-300 dark:bg-gray-700 dark:text-white p-3 rounded-xl max-w-[80%] shadow-lg mb-4 self-start m-[10px]">
       <p className="text-s text-gray-500">{sender.username}</p>
       {text}

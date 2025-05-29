@@ -20,6 +20,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await logIn(email, password);
+      router.push("/chats");
     } catch (error: any) {
       alert(error.message);
     }

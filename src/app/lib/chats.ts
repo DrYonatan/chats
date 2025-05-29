@@ -152,15 +152,19 @@ async function parseChat(
     })
   );
 
+  const sortedMessages = messages.sort(
+    (a, b) => new Date(b.sendTime).getTime() - new Date(a.sendTime).getTime()
+  );
+
   if (chatDTO.type === "DM") {
     // Direct Message (DM) chat type
-    res = new DM(id, participants, messages);
+    res = new DM(id, participants, sortedMessages);
   } else {
     res = new GroupChat(
       id,
       chatDTO.groupName,
       chatDTO.picture,
-      messages,
+      sortedMessages,
       participants
     );
   }
