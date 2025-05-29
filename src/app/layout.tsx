@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import SideBar from "./ui/sidebar";
+import { UserProvider } from "./contexts/UserContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,14 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
-        <div className="dark:bg-gray-800" style={{ display: "flex" }}>
-          <SideBar />
-          {children}
-        </div>
+        <UserProvider>
+          <div className="dark:bg-gray-800 flex h-full">
+            <SideBar />
+            {children}
+          </div>
+        </UserProvider>
       </body>
     </html>
   );

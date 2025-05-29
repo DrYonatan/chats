@@ -1,20 +1,31 @@
 import { initializeApp } from "firebase/app";
-import 'firebase/database';
-import { getDatabase, ref, get, onValue, set } from 'firebase/database';
+import "firebase/database";
+import { getDatabase, ref, get, onValue, set } from "firebase/database";
+import {
+  browserLocalPersistence,
+  getAuth,
+  setPersistence,
+} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDLwqKclcNnH4zt87A_jlKVM_yJUbgBl2Qpc",
-  authDomain: "chats-55a5f.firebaseapp.com",
-  databaseURL: "https://chats-55a5f-default-rtdb.firebaseio.com",
-  projectId: "chats-55a5f",
-  storageBucket: "chats-55a5f.firebasestorage.app",
-  messagingSenderId: "514295668880",
-  appId: "1:514295668880:web:fd7d9ad7f5a1e842b7b815",
-  measurementId: "G-C4JY6H1WY2",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_API_KE,
+  databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
 const database = getDatabase(app);
 
-export { database, ref, onValue, get, set};
+export const auth = getAuth(app);
+
+setPersistence(auth, browserLocalPersistence).catch((err) => {
+  console.error("Failed to set auth persistence:", err);
+});
+
+export { database, ref, onValue, get, set };
