@@ -96,8 +96,7 @@ export const addMessage = async (
   message: Message
 ): Promise<void> => {
   try {
-    const messageId = createRandomString(5);
-    const messagesRef = ref(database, `chats/${chatId}/messages/${messageId}`);
+    const messagesRef = ref(database, `chats/${chatId}/messages/${message.id}`);
     set(messagesRef, {
       text: message.text,
       sendTime: message.sendTime.toString(),
@@ -172,7 +171,7 @@ async function parseChat(
   return res;
 }
 
-function createRandomString(length: number) {
+export function createRandomString(length: number) {
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";

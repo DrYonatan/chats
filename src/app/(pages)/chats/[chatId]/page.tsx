@@ -1,12 +1,11 @@
 "use client";
 
 import { getChatById, sendMessage } from "@/app/api/chats";
+import { getUserById } from "@/app/api/users";
 import { useCurrentUser } from "@/app/contexts/UserContext";
-import { chats } from "@/app/temp/chats";
-import { users } from "@/app/temp/users";
+import { createRandomString } from "@/app/lib/chats";
+import { database, ref } from "@/app/lib/firebase/firebase";
 import { Chat } from "@/app/types/chat";
-import { DM } from "@/app/types/dm";
-import { GroupChat } from "@/app/types/group-chat";
 import { Message } from "@/app/types/message";
 import { User } from "@/app/types/user";
 import ChatsHeader from "@/app/ui/chatsheader";
@@ -14,6 +13,7 @@ import ChatsHeaderLoading from "@/app/ui/chatsheader-loading";
 import MessageComponent from "@/app/ui/message-component";
 import SendIconComponent from "@/app/ui/send-icon";
 import TextFieldComponent from "@/app/ui/text-field";
+import { off, onChildAdded } from "firebase/database";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -24,18 +24,68 @@ export default function ChatBox() {
 
   const [chat, setChat] = useState<Chat>();
 
-  const [messageText, setMessageText] = useState<string>();
+  const [messages, setMessages] = useState<Message[]>();
+
+  const [messageText, setMessageText] = useState<string>("");
 
   useEffect(() => {
-    getChatById(params.chatId!.toString()).then((data) => {
-      if (data != null) setChat(data);
-    });
-  }, []);
+  const messagesRef = ref(database, `chats/${params.chatId}/messages`);
+
+  let unsubscribed = false;
+
+  const loadChat = async () => {
+    const data = await getChatById(params.chatId!.toString());
+    if (data != null && !unsubscribed) {
+      setChat(data);
+      setMessages(data.messages);
+
+      const unsubscribe = onChildAdded(messagesRef, async (snapshot) => {
+        const message = snapshot.val();
+
+        const sender = await getUserById(message.senderId);
+
+        setMessages((prev) => {
+          if (!prev) return prev;
+
+          const newMessage = {
+            id: snapshot.key!,
+            sendTime: message.sendTime,
+            sender,
+            text: message.text,
+          };
+
+          // Prevent duplicates
+          if (prev.some((msg) => msg.id === newMessage.id)) {
+            return prev;
+          }
+
+          return [newMessage, ...prev];
+        });
+      });
+
+      // Save unsubscribe to cleanup
+      cleanupFn = () => {
+        off(messagesRef, "child_added", unsubscribe);
+      };
+    }
+  };
+
+  let cleanupFn: () => void = () => {};
+
+  loadChat();
+
+  return () => {
+    unsubscribed = true;
+    cleanupFn();
+  };
+}, []);
+
 
   const submitMessage = () => {
     let messageToSend: Message;
     if (messageText) {
       messageToSend = {
+        id: createRandomString(5),
         text: messageText,
         sendTime: new Date(Date.now()),
         sender: user!,
@@ -43,13 +93,9 @@ export default function ChatBox() {
 
       sendMessage(chat!, messageToSend);
       setMessageText("");
-      setChat((prevChat) => {
-        if (!prevChat) return prevChat;
-
-        return {
-          ...prevChat,
-          messages: [messageToSend, ...(prevChat.messages ?? [])], // ✅ safe fallback
-        };
+      setMessages((prev) => {
+        if (!prev) return prev;
+        return [messageToSend, ...prev];
       });
     }
   };
@@ -59,7 +105,7 @@ export default function ChatBox() {
       <ChatsHeader currentChat={chat!} />
 
       <div className="flex grow h-full flex-col-reverse justify-start overflow-y-scroll">
-        {chat?.messages.map((message) => {
+        {messages?.map((message) => {
           return (
             <MessageComponent
               key={message.id}
