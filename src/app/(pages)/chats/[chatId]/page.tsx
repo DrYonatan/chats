@@ -3,6 +3,7 @@
 import { getChatById, sendMessage } from "@/app/api/chats";
 import { getUserById } from "@/app/api/users";
 import { useCurrentUser } from "@/app/contexts/UserContext";
+import { createRandomString } from "@/app/lib/chats";
 import { database, ref } from "@/app/lib/firebase/firebase";
 import { Chat } from "@/app/types/chat";
 import { Message } from "@/app/types/message";
@@ -25,7 +26,7 @@ export default function ChatBox() {
 
   const [messages, setMessages] = useState<Message[]>();
 
-  const [messageText, setMessageText] = useState<string>();
+  const [messageText, setMessageText] = useState<string>("");
 
   useEffect(() => {
   const messagesRef = ref(database, `chats/${params.chatId}/messages`);
@@ -84,6 +85,7 @@ export default function ChatBox() {
     let messageToSend: Message;
     if (messageText) {
       messageToSend = {
+        id: createRandomString(5),
         text: messageText,
         sendTime: new Date(Date.now()),
         sender: user!,

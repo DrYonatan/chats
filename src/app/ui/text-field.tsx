@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 
 type props = {
   messageText: string | undefined;
-  setMessageText: Dispatch<SetStateAction<string | undefined>>;
+  setMessageText: Dispatch<SetStateAction<string>>;
 };
 
 export default function TextFieldComponent({
